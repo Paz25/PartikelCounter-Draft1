@@ -9,27 +9,110 @@ class PartikelCounterBuffer extends Migration
     public function up()
     {
         $this->forge->addField([
-            'blog_id' => [
+            'Id' => [
                 'type'           => 'INT',
-                'constraint'     => 5,
+                'constraint'     => 11,
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'blog_title' => [
+            'mac_address' => [
                 'type'       => 'VARCHAR',
-                'constraint' => '100',
+                'constraint' => '30',
             ],
-            'blog_description' => [
-                'type' => 'TEXT',
+            'waktu TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
+            'SignalDb' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 10,
+                'null'       => true,
+            ],
+            'Value03' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 9,
                 'null' => true,
             ],
+            'Limit03' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 9,
+                'null' => true,
+            ],
+            'Value05' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 9,
+                'null' => true,
+            ],
+            'Limit05' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 9,
+                'null' => true,
+            ],
+            'Value10' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 9,
+                'null' => true,
+            ],
+            'Limit10' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 9,
+                'null' => true,
+            ],
+            'Value25' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 9,
+                'null' => true,
+            ],
+            'Limit25' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 9,
+                'null' => true,
+            ],
+            'Value50' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 9,
+                'null' => true,
+            ],
+            'Limit50' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 9,
+                'null' => true,
+            ],
+            'Value100' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 9,
+                'null' => true,
+            ],
+            'Limit100' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 9,
+                'null' => true,
+            ],
+            'Status' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 10,
+                'null' => true,
+            ],
+            'port_ke' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 5,
+                'null' => true,
+            ],
+            'user' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 20,
+                'null'       => true,
+            ],
+            'valueReal' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 255,
+                'null'       => true,
+                'default'    => '|||||',
+            ]
         ]);
-        $this->forge->addKey('blog_id', true);
-        $this->forge->createTable('blog');
+        $this->forge->addKey('Id', true);
+        $this->forge->createTable('partikel_counter_buffer');
     }
 
     public function down()
     {
-        $this->forge->dropTable('blog');
+        $this->forge->dropTable('partikel_counter_buffer');
     }
 }
