@@ -9,3 +9,4 @@ $routes->get('/', 'Home::index');
 
 $routes->resource('partikelcounterbuffer', ['controller' => 'PartikelCounterBufferController']);
 $routes->resource('partikelcounterdata', ['controller' => 'PartikelCounterDataController']);
+
