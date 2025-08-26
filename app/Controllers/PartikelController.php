@@ -2,42 +2,15 @@
 
 namespace App\Controllers;
 
+use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
-use CodeIgniter\RESTful\ResourceController;
 use App\Models\PartikelCounterBufferModel;
 use App\Models\PartikelCounterDataModel;
 
-class PartikelCounterDataController extends ResourceController
+class PartikelController extends BaseController
 {
-    protected $modelName = 'App\Models\PartikelCounterDataModel';
-    protected $format    = 'json';
 
-    /**
-     * Return an array of resource objects, themselves in array format.
-     *
-     * @return ResponseInterface
-     */
-    public function index()
-    {
-        $start = $this->request->getGet('start');
-        $end   = $this->request->getGet('end');
-        $status = $this->request->getGet('status');
-
-        $model = new \App\Models\PartikelCounterDataModel();
-        $data  = [
-            'message' => 'success',
-            'data'    => $model->getFilteredData($start, $end, $status),
-        ];
-
-        return $this->respond($data, 200);
-    }
-
-    /**
-     * Create a new resource object, from "posted" parameters.
-     *
-     * @return ResponseInterface
-     */
-    public function create()
+    public function saveBuffer()
     {
         $bufferModel = new PartikelCounterBufferModel();
         $dataModel   = new PartikelCounterDataModel();
