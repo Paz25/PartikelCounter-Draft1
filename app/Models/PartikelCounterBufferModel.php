@@ -30,10 +30,4 @@ class PartikelCounterBufferModel extends Model
         'user',
         'valueReal',
     ];
-
-    // Dates
-    protected $useTimestamps = true;
-    protected $dateFormat    = 'datetime';
-    protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
 }

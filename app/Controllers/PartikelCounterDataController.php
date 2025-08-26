@@ -45,7 +45,26 @@ class PartikelCounterDataController extends ResourceController
         $oldBuffer = $bufferModel->first();
 
         if ($oldBuffer) {
-            $dataModel->insert($oldBuffer);
+            $temp = [
+                'mac_address'  => $oldBuffer['mac_address'],
+                'waktu'  => $oldBuffer['waktu'],
+                'Value03' => $oldBuffer['Value03'],
+                'Limit03' => $oldBuffer['Limit03'],
+                'Value05' => $oldBuffer['Value05'],
+                'Limit05' => $oldBuffer['Limit05'],
+                'Value10' => $oldBuffer['Value10'],
+                'Limit10' => $oldBuffer['Limit10'],
+                'Value25' => $oldBuffer['Value25'],
+                'Limit25' => $oldBuffer['Limit25'],
+                'Value50' => $oldBuffer['Value50'],
+                'Limit50' => $oldBuffer['Limit50'],
+                'Value100' => $oldBuffer['Value100'],
+                'Limit100' => $oldBuffer['Limit100'],
+                'Status' => $oldBuffer['Status'],
+                'port_ke' => $oldBuffer['port_ke'],
+                'user' => $oldBuffer['user'],
+            ];
+            $dataModel->insert($temp);
 
             // $bufferModel->truncate();
         }
