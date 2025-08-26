@@ -1,0 +1,19 @@
+.card-narrow{ max-width:760px; }
+
+.table-tight td, .table-tight th { padding:.5rem; }
+.value-col{ min-width:110px; }
+.limit-col{ min-width:140px; }
+
+/* spacing antar section dalam card */
+.card .card-body{ display:grid; gap:.75rem; }
+
+/* kotak border tiap section */
+.section{
+  border:1px solid var(--bs-border-color);
+  border-radius:.5rem;
+  padding:.75rem;
+  background:#fff;
+}
+
+/* center helper */
+.td-center{ text-align:center; vertical-align:middle; }
