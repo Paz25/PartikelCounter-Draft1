@@ -9,6 +9,7 @@ use CodeIgniter\Router\RouteCollection;
 // $routes->get('/', 'Home::index');
 $routes->get('/', 'Home::index');
 $routes->get('/particle', 'Particle::index');
+$routes->get('/history', 'History::index');
 
 
 $routes->resource('partikelcounterbuffer', ['controller' => 'PartikelCounterBufferController']);

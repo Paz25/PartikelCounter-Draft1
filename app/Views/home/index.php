@@ -5,10 +5,7 @@
 <div class="mx-auto card-narrow">
     <div class="card shadow-sm">
         <div class="card-body" id="partikel-container">
-
-            <!-- Loading -->
             <div id="loading">Loading data...</div>
-
         </div>
     </div>
 </div>
@@ -29,7 +26,6 @@
 
             const partikel = json.data;
 
-            // Build HTML
             const html = `
                 <!-- Header atas -->
                 <div class="row border-bottom pb-2 mb-3">
@@ -68,9 +64,9 @@
                     <div class="col-4 text-center">${partikel.Value10 ?? '-'}</div>
                 </div>
                 <div class="row py-2 border-bottom">
-                    <div class="col-4">&ge; 5.0</div>
-                    <div class="col-4 text-center">${partikel.Limit50 ?? '-'}</div>
-                    <div class="col-4 text-center">${partikel.Value50 ?? '-'}</div>
+                    <div class="col-4">&ge; 2.5 </div>
+                    <div class="col-4 text-center">${partikel.Limit25 ?? '-'}</div>
+                    <div class="col-4 text-center">${partikel.Value25 ?? '-'}</div>
                 </div>
                 <div class="row py-2 border-bottom">
                     <div class="col-4">&ge; 10.0</div>
@@ -84,7 +80,7 @@
                 </div>
                 <div class="row">
                     <div class="col-6 fw-bold">Status</div>
-                    <div class="col-6 text-end">${partikel.Status ?? '-'}</div>
+                    <div class="col-6 text-end" onclick="window.location.href='/history'" style="cursor:pointer;">${partikel.Status ?? '-'}</div>
                 </div>
             `;
 
