@@ -2,42 +2,71 @@
 
 <?= $this->section('content') ?>
 
-<div class="mx-auto card-narrow">
-    <div class="card shadow-sm">
-        <div class="card-body" id="partikel-container">
-            <div id="loading">Loading data...</div>
+<div class="mx-auto">
+    <div class="row">
+        <!-- Kolom tabel -->
+        <div class="col-md-6 col-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="p-4" id="particle-container">
+                        <div id="loading">Loading data...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Kolom grafik -->
+        <div class="col-md-6 col-12">
+            <div class="card shadow h-100 md:mih-h">
+                <div class="card-body p-4 d-flex">
+                    <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+                        <canvas id="particleChart"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
 
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
 <script>
-    async function fetchPartikel() {
+    let chart;
+
+    async function fetchParticle() {
         try {
-            const res = await fetch("<?= base_url('/partikelcounterbuffer') ?>");
+            const res = await fetch("<?= base_url('/particlecounterbuffer') ?>");
             const json = await res.json();
 
             if (!json.data) {
-                document.getElementById('partikel-container').innerHTML = "<p class='text-danger'>No data found</p>";
+                document.getElementById('particle-container').innerHTML = "<p class='text-danger'>No data found</p>";
                 return;
             }
 
-            const partikel = json.data;
+            const particle = json.data;
+
+            const statusValue = particle.Status ?? '-';
+            let statusBadge = `<span class="badge bg-secondary p-2 px-5">${statusValue}</span>`;
+
+            if (statusValue.toLowerCase() === 'normal') {
+                statusBadge = `<span class="badge bg-success p-2 px-5">Normal</span>`;
+            } else if (statusValue.toLowerCase() === 'alarm') {
+                statusBadge = `<span class="badge bg-danger text-white p-2 px-5">Alarm</span>`;
+            }
 
             const html = `
                 <!-- Header atas -->
                 <div class="row border-bottom pb-2 mb-3">
                     <div class="col-8 fw-bold" onclick="window.location.href='/particle'" style="cursor:pointer;">
-                        Particle Counter ${partikel.mac_address ?? 'Room Name'}
+                        Particle Counter ${particle.mac_address ?? 'Room Name'}
                     </div>
-                    <div class="col fw-bold">Signal Dbm ${partikel.SignalDb ?? '-'}</div>
+                    <div class="col fw-bold">Signal Dbm ${particle.SignalDb ?? '-'}</div>
                 </div>
 
                 <!-- Judul kolom -->
                 <div class="row fw-bold border-bottom py-2">
-                    <div class="col-4">Particle size (µm)</div>
+                    <div class="col-4 flex align-items-center justify-content-center"><p>Particle size (µm)</p></div>
                     <div class="col-8 d-flex flex-column">
                         <div class="text-center">Particle count/m³</div>
                         <div class="row">
@@ -50,52 +79,102 @@
                 <!-- Data rows -->
                 <div class="row py-2 border-bottom">
                     <div class="col-4">&ge; 0.3</div>
-                    <div class="col-4 text-center">${partikel.Limit03 ?? '-'}</div>
-                    <div class="col-4 text-center">${partikel.Value03 ?? '-'}</div>
+                    <div class="col-4 text-center">${particle.Limit03 ?? '-'}</div>
+                    <div class="col-4 text-center">${particle.Value03 ?? '-'}</div>
                 </div>
                 <div class="row py-2 border-bottom">
                     <div class="col-4">&ge; 0.5</div>
-                    <div class="col-4 text-center">${partikel.Limit05 ?? '-'}</div>
-                    <div class="col-4 text-center">${partikel.Value05 ?? '-'}</div>
+                    <div class="col-4 text-center">${particle.Limit05 ?? '-'}</div>
+                    <div class="col-4 text-center">${particle.Value05 ?? '-'}</div>
                 </div>
                 <div class="row py-2 border-bottom">
                     <div class="col-4">&ge; 1.0</div>
-                    <div class="col-4 text-center">${partikel.Limit10 ?? '-'}</div>
-                    <div class="col-4 text-center">${partikel.Value10 ?? '-'}</div>
+                    <div class="col-4 text-center">${particle.Limit10 ?? '-'}</div>
+                    <div class="col-4 text-center">${particle.Value10 ?? '-'}</div>
                 </div>
                 <div class="row py-2 border-bottom">
                     <div class="col-4">&ge; 2.5 </div>
-                    <div class="col-4 text-center">${partikel.Limit25 ?? '-'}</div>
-                    <div class="col-4 text-center">${partikel.Value25 ?? '-'}</div>
+                    <div class="col-4 text-center">${particle.Limit25 ?? '-'}</div>
+                    <div class="col-4 text-center">${particle.Value25 ?? '-'}</div>
                 </div>
                 <div class="row py-2 border-bottom">
                     <div class="col-4">&ge; 10.0</div>
-                    <div class="col-4 text-center">${partikel.Limit100 ?? '-'}</div>
-                    <div class="col-4 text-center">${partikel.Value100 ?? '-'}</div>
+                    <div class="col-4 text-center">${particle.Limit100 ?? '-'}</div>
+                    <div class="col-4 text-center">${particle.Value100 ?? '-'}</div>
                 </div>
 
-                <div class="row mt-3">
+                <div class="row my-3">
                     <div class="col-6 fw-bold">Time update</div>
-                    <div class="col-6 text-end">${partikel.waktu ?? '-'}</div>
+                    <div class="col-6 text-end">${particle.waktu ?? '-'}</div>
                 </div>
-                <div class="row">
+               <div class="row">
                     <div class="col-6 fw-bold">Status</div>
-                    <div class="col-6 text-end" onclick="window.location.href='/history'" style="cursor:pointer;">${partikel.Status ?? '-'}</div>
+                    <div class="col-6 text-end" onclick="window.location.href='/history'" style="cursor:pointer;">
+                        ${statusBadge}
+                    </div>
                 </div>
             `;
 
-            document.getElementById('partikel-container').innerHTML = html;
+            document.getElementById('particle-container').innerHTML = html;
+
+            const labels = ["≥0.3µm", "≥0.5µm", "≥1.0µm", "≥2.5µm", "≥10.0µm"];
+            const actualValues = [
+                particle.Value03 ?? 0,
+                particle.Value05 ?? 0,
+                particle.Value10 ?? 0,
+                particle.Value25 ?? 0,
+                particle.Value100 ?? 0
+            ];
+            const limitValues = [
+                particle.Limit03 ?? 0,
+                particle.Limit05 ?? 0,
+                particle.Limit10 ?? 0,
+                particle.Limit25 ?? 0,
+                particle.Limit100 ?? 0
+            ];
+
+            const ctx = document.getElementById('particleChart').getContext('2d');
+            if (!chart) {
+                chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'Actual',
+                                data: actualValues,
+                                backgroundColor: '#6dcefa'
+                            },
+                            {
+                                label: 'Limit (ISO 7)',
+                                data: limitValues,
+                                backgroundColor: '#0052d6'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'top' }
+                        },
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                });
+            } else {
+                chart.data.datasets[0].data = actualValues;
+                chart.data.datasets[1].data = limitValues;
+                chart.update();
+            }
 
         } catch (err) {
             console.error(err);
-            document.getElementById('partikel-container').innerHTML = "<p class='text-danger'>Error loading data</p>";
+            document.getElementById('particle-container').innerHTML = "<p class='text-danger'>Error loading data</p>";
         }
     }
 
-    // load saat pertama kali
-    fetchPartikel();
-
-    // refresh otomatis setiap 10 detik
-    setInterval(fetchPartikel, 10000);
+    fetchParticle();
+    setInterval(fetchParticle, 10000);
 </script>
 <?= $this->endSection() ?>
