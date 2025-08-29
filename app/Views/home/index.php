@@ -36,7 +36,7 @@
 
     async function fetchParticle() {
         try {
-            const res = await fetch("<?= base_url('/particlecounterbuffer') ?>");
+            const res = await fetch("<?= base_url('/partikelcounterbuffer') ?>");
             const json = await res.json();
 
             if (!json.data) {
@@ -45,7 +45,13 @@
             }
 
             const particle = json.data;
+            const isoClass = particle.iso_class ?? '-';
 
+            const limitRes = await fetch("<?= base_url('/api/iso-limits') ?>/" + isoClass);
+            const limitJson = await limitRes.json();
+            const limits = limitJson.data ?? {};
+
+            // === Set status badge ===
             const statusValue = particle.Status ?? '-';
             let statusBadge = `<span class="badge bg-secondary p-2 px-5">${statusValue}</span>`;
 
@@ -55,6 +61,7 @@
                 statusBadge = `<span class="badge bg-danger text-white p-2 px-5">Alarm</span>`;
             }
 
+            // === Render Tabel ===
             const html = `
                 <!-- Header atas -->
                 <div class="row border-bottom pb-2 mb-3">
@@ -66,11 +73,11 @@
 
                 <!-- Judul kolom -->
                 <div class="row fw-bold border-bottom py-2">
-                    <div class="col-4 flex align-items-center justify-content-center"><p>Particle size (µm)</p></div>
+                    <div class="col-4">Particle size (µm)</div>
                     <div class="col-8 d-flex flex-column">
                         <div class="text-center">Particle count/m³</div>
                         <div class="row">
-                            <div class="col-6 text-center">Limit (ISO 7)</div>
+                            <div class="col-6 text-center">Limit (ISO ${isoClass})</div>
                             <div class="col-6 text-center">Actual</div>
                         </div>
                     </div>
@@ -79,35 +86,30 @@
                 <!-- Data rows -->
                 <div class="row py-2 border-bottom">
                     <div class="col-4">&ge; 0.3</div>
-                    <div class="col-4 text-center">${particle.Limit03 ?? '-'}</div>
+                    <div class="col-4 text-center">${limits.Limit03 ?? '-'}</div>
                     <div class="col-4 text-center">${particle.Value03 ?? '-'}</div>
                 </div>
                 <div class="row py-2 border-bottom">
                     <div class="col-4">&ge; 0.5</div>
-                    <div class="col-4 text-center">${particle.Limit05 ?? '-'}</div>
+                    <div class="col-4 text-center">${limits.Limit05 ?? '-'}</div>
                     <div class="col-4 text-center">${particle.Value05 ?? '-'}</div>
                 </div>
                 <div class="row py-2 border-bottom">
                     <div class="col-4">&ge; 1.0</div>
-                    <div class="col-4 text-center">${particle.Limit10 ?? '-'}</div>
+                    <div class="col-4 text-center">${limits.Limit10 ?? '-'}</div>
                     <div class="col-4 text-center">${particle.Value10 ?? '-'}</div>
                 </div>
                 <div class="row py-2 border-bottom">
-                    <div class="col-4">&ge; 2.5 </div>
-                    <div class="col-4 text-center">${particle.Limit25 ?? '-'}</div>
-                    <div class="col-4 text-center">${particle.Value25 ?? '-'}</div>
-                </div>
-                <div class="row py-2 border-bottom">
-                    <div class="col-4">&ge; 10.0</div>
-                    <div class="col-4 text-center">${particle.Limit100 ?? '-'}</div>
-                    <div class="col-4 text-center">${particle.Value100 ?? '-'}</div>
+                    <div class="col-4">&ge; 5.0</div>
+                    <div class="col-4 text-center">${limits.Limit50 ?? '-'}</div>
+                    <div class="col-4 text-center">${particle.Value50 ?? '-'}</div>
                 </div>
 
                 <div class="row my-3">
                     <div class="col-6 fw-bold">Time update</div>
                     <div class="col-6 text-end">${particle.waktu ?? '-'}</div>
                 </div>
-               <div class="row">
+                <div class="row">
                     <div class="col-6 fw-bold">Status</div>
                     <div class="col-6 text-end" onclick="window.location.href='/history'" style="cursor:pointer;">
                         ${statusBadge}
@@ -117,19 +119,17 @@
 
             document.getElementById('particle-container').innerHTML = html;
 
-            const labels = ["≥0.3µm", "≥0.5µm", "≥1.0µm", "≥2.5µm", "≥10.0µm"];
+            const labels = ["≥0.3µm", "≥0.5µm", "≥1.0µm", "≥10.0µm"];
             const actualValues = [
                 particle.Value03 ?? 0,
                 particle.Value05 ?? 0,
                 particle.Value10 ?? 0,
-                particle.Value25 ?? 0,
                 particle.Value100 ?? 0
             ];
             const limitValues = [
                 particle.Limit03 ?? 0,
                 particle.Limit05 ?? 0,
                 particle.Limit10 ?? 0,
-                particle.Limit25 ?? 0,
                 particle.Limit100 ?? 0
             ];
 
@@ -146,7 +146,7 @@
                                 backgroundColor: '#6dcefa'
                             },
                             {
-                                label: 'Limit (ISO 7)',
+                                label: `Limit (ISO ${isoClass})`,
                                 data: limitValues,
                                 backgroundColor: '#0052d6'
                             }
@@ -165,6 +165,7 @@
             } else {
                 chart.data.datasets[0].data = actualValues;
                 chart.data.datasets[1].data = limitValues;
+                chart.data.datasets[1].label = `Limit (ISO ${isoClass})`;
                 chart.update();
             }
 

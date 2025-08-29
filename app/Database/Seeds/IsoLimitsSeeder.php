@@ -11,7 +11,7 @@ class IsoLimitsSeeder extends Seeder
         $data = [
             [
                 'iso_class' => 1,
-                'Limit03' => 10,
+                'Limit03' => null,
                 'Limit05' => null,
                 'Limit10' => null,
                 'Limit25' => null,
@@ -20,7 +20,7 @@ class IsoLimitsSeeder extends Seeder
             ],
             [
                 'iso_class' => 2,
-                'Limit03' => 100,
+                'Limit03' => 10,
                 'Limit05' => 4,
                 'Limit10' => null,
                 'Limit25' => null,
@@ -29,7 +29,7 @@ class IsoLimitsSeeder extends Seeder
             ],
             [
                 'iso_class' => 3,
-                'Limit03' => 1000,
+                'Limit03' => 102,
                 'Limit05' => 35,
                 'Limit10' => 8,
                 'Limit25' => null,
@@ -38,7 +38,7 @@ class IsoLimitsSeeder extends Seeder
             ],
             [
                 'iso_class' => 4,
-                'Limit03' => 10000,
+                'Limit03' => 1020,
                 'Limit05' => 352,
                 'Limit10' => 83,
                 'Limit25' => null,
@@ -47,7 +47,7 @@ class IsoLimitsSeeder extends Seeder
             ],
             [
                 'iso_class' => 5,
-                'Limit03' => 100000,
+                'Limit03' => 10200,
                 'Limit05' => 3520,
                 'Limit10' => 832,
                 'Limit25' => null,
@@ -56,7 +56,7 @@ class IsoLimitsSeeder extends Seeder
             ],
             [
                 'iso_class' => 6,
-                'Limit03' => null,
+                'Limit03' => 102000,
                 'Limit05' => 35200,
                 'Limit10' => 8320,
                 'Limit25' => null,

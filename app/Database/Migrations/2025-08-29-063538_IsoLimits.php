@@ -16,7 +16,7 @@ class CreateIsoLimits extends Migration
                 'auto_increment' => true,
             ],
             'iso_class' => [
-                'type' => 'TINYINT',
+                'type' => 'INT',
                 'constraint' => 1,
                 'null' => false,
                 'unique' => true,

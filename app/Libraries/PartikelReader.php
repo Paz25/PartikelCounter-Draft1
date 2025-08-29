@@ -4,7 +4,6 @@ namespace App\Libraries;
 require_once dirname(__FILE__, 2) . '/ThirdParty/phpmodbus/Phpmodbus/ModbusMaster.php';
 
 use ModbusMaster;
-use mysqli;
 
 class PartikelReader
 {
@@ -13,7 +12,13 @@ class PartikelReader
     protected $readStart = 0;
     protected $readCount = 40;
 
-    // baca sensor via modbus
+    protected $db;
+
+    public function __construct()
+    {
+        $this->db = db_connect();
+    }
+
     public function bacaSensor()
     {
         try {
@@ -27,7 +32,6 @@ class PartikelReader
         }
     }
 
-    // parsing data
     public function parseData($regs)
     {
         $words = [];
@@ -35,16 +39,46 @@ class PartikelReader
             $words[] = ($regs[$i] << 8) | $regs[$i + 1];
         }
 
-        $val03 = ($words[8] << 16) | $words[9];
-        $val05 = ($words[10] << 16) | $words[11];
-        $val10 = ($words[12] << 16) | $words[13];
-        $val50 = ($words[14] << 16) | $words[15];
+        return [
+            'Value03' => ($words[8] << 16) | $words[9],
+            'Value05' => ($words[10] << 16) | $words[11],
+            'Value10' => ($words[12] << 16) | $words[13],
+            'Value50' => ($words[14] << 16) | $words[15],
+        ];
+    }
+
+    public function evaluasiISO(array $values, int $isoClass)
+    {
+        $limit = $this->db->table('iso_limits')
+            ->where('iso_class', $isoClass)
+            ->get()
+            ->getRowArray();
+
+        if (!$limit) {
+            return ['Status' => 'Unknown', 'iso_class' => null] + $values;
+        }
+
+        $status = "Normal";
+        foreach ([
+            'Value03' => 'Limit03',
+            'Value05' => 'Limit05',
+            'Value10' => 'Limit10',
+            'Value25' => 'Limit25',
+            'Value50' => 'Limit50',
+            'Value100' => 'Limit100'
+        ] as $valKey => $limitKey) {
+            $val = $values[$valKey] ?? null;
+            $lim = $limit[$limitKey] ?? null;
+
+            if ($lim !== null && $val !== null && $val > $lim) {
+                $status = "Alarm";
+                break;
+            }
+        }
 
         return [
-            'Value03' => $val03,
-            'Value05' => $val05,
-            'Value10' => $val10,
-            'Value50' => $val50,
-        ];
+            'Status' => $status,
+            'iso_class' => $limit['id'],
+        ] + $values;
     }
 }
