@@ -8,7 +8,7 @@ use CodeIgniter\RESTful\ResourceController;
 class PartikelCounterBufferController extends ResourceController
 {
     protected $modelName = 'App\Models\PartikelCounterBufferModel';
-    protected $format    = 'json';
+    protected $format = 'json';
 
     /**
      * Return an array of resource objects, themselves in array format.
@@ -17,11 +17,16 @@ class PartikelCounterBufferController extends ResourceController
      */
     public function index()
     {
+        $lastData = $this->model
+            ->orderBy('id', 'DESC')
+            ->first();
+
         $data = [
             'message' => 'success',
-            'data'    => $this->model->findAll(),
+            'data' => $lastData,
         ];
 
         return $this->respond($data, 200);
     }
+
 }

@@ -2,7 +2,6 @@
 
 <?= $this->section('content') ?>
 <div class="mx-auto card-narrow">
-
     <!-- Header IP -->
     <div class="d-flex align-items-center justify-content-center mb-3">
         <span class="h5 mb-0">IP Device: <?= esc($device_ip) ?></span>

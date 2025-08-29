@@ -7,8 +7,11 @@ use CodeIgniter\Router\RouteCollection;
  */
 
 // $routes->get('/', 'Home::index');
-$routes->get('/', 'Particle::index');
+$routes->get('/', 'Home::index');
+$routes->get('/particle', 'Particle::index');
+$routes->get('/history', 'History::index');
 
-$routes->resource('partikelcounterbuffer', ['controller' => 'PartikelCounterBufferController']);
-$routes->resource('partikelcounterdata', ['controller' => 'PartikelCounterDataController']);
+
+$routes->resource('particlecounterbuffer', ['controller' => 'ParticleCounterBufferController']);
+$routes->resource('particlecounterdata', ['controller' => 'ParticleCounterDataController']);
 

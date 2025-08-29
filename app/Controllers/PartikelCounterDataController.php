@@ -10,7 +10,7 @@ use App\Models\PartikelCounterDataModel;
 class PartikelCounterDataController extends ResourceController
 {
     protected $modelName = 'App\Models\PartikelCounterDataModel';
-    protected $format    = 'json';
+    protected $format = 'json';
 
     /**
      * Return an array of resource objects, themselves in array format.
@@ -20,13 +20,13 @@ class PartikelCounterDataController extends ResourceController
     public function index()
     {
         $start = $this->request->getGet('start');
-        $end   = $this->request->getGet('end');
+        $end = $this->request->getGet('end');
         $status = $this->request->getGet('status');
 
         $model = new \App\Models\PartikelCounterDataModel();
-        $data  = [
+        $data = [
             'message' => 'success',
-            'data'    => $model->getFilteredData($start, $end, $status),
+            'data' => $model->getFilteredData($start, $end, $status),
         ];
 
         return $this->respond($data, 200);
@@ -40,14 +40,14 @@ class PartikelCounterDataController extends ResourceController
     public function create()
     {
         $bufferModel = new PartikelCounterBufferModel();
-        $dataModel   = new PartikelCounterDataModel();
+        $dataModel = new PartikelCounterDataModel();
 
         $oldBuffer = $bufferModel->first();
 
         if ($oldBuffer) {
             $temp = [
-                'mac_address'  => $oldBuffer['mac_address'],
-                'waktu'  => $oldBuffer['waktu'],
+                'mac_address' => $oldBuffer['mac_address'],
+                'waktu' => $oldBuffer['waktu'],
                 'Value03' => $oldBuffer['Value03'],
                 'Limit03' => $oldBuffer['Limit03'],
                 'Value05' => $oldBuffer['Value05'],
@@ -70,8 +70,8 @@ class PartikelCounterDataController extends ResourceController
         }
 
         $newData = [
-            'mac_address'  => $this->request->getPost('mac_address'),
-            'waktu'  => $this->request->getPost('waktu'),
+            'mac_address' => $this->request->getPost('mac_address'),
+            'waktu' => $this->request->getPost('waktu'),
             'SignalDb' => $this->request->getPost('SignalDb'),
             'Value03' => $this->request->getPost('Value03'),
             'Limit03' => $this->request->getPost('Limit03'),
