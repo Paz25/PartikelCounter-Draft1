@@ -6,7 +6,7 @@ use App\Libraries\CoilService;
 use App\Libraries\PartikelReader;
 use App\Models\PartikelCounterBufferModel;
 
-class Coil extends BaseController
+class CoilController extends BaseController
 {
     private CoilService $svc;
     private $reader;
