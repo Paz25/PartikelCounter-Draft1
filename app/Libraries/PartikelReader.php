@@ -81,4 +81,22 @@ class PartikelReader
             'iso_class' => $limit['id'],
         ] + $values;
     }
+
+    public function cekCoilStatus($unitId, $address): bool
+    {
+        try {
+            $modbus = new \ModbusMaster($this->ip, "TCP");
+            $modbus->port = $this->port;
+
+            $resp = $modbus->readCoils($unitId, $address, 1); // baca 1 coil
+
+            if (is_array($resp) && isset($resp[0])) {
+                return (bool) $resp[0]; // true = ON, false = OFF
+            }
+            return false;
+        } catch (\Exception $e) {
+            return false; // kalau gagal baca coil, anggap OFF
+        }
+    }
+
 }

@@ -21,6 +21,16 @@ class ReadPartikel extends BaseCommand
         $isoClass = $params[0] ?? 7;
 
         while (true) {
+            // 🔎 cek coil ON/OFF sensor (misal address 30 / 0x001E)
+            $isOn = $reader->cekCoilStatus(1, 0x001E);
+
+            if (!$isOn) {
+                CLI::error("Sensor belum ON, tunggu ...");
+                sleep(5);
+                continue; // skip loop, jangan insert ke DB
+            }
+
+            // sensor ON → lanjut baca data
             $regs = $reader->bacaSensor();
 
             if ($regs) {
@@ -42,6 +52,7 @@ class ReadPartikel extends BaseCommand
             } else {
                 CLI::error("Tidak bisa baca data sensor");
             }
+
             sleep(10);
         }
     }
