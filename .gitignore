@@ -63,6 +63,11 @@ writable/uploads/*
 writable/debugbar/*
 !writable/debugbar/index.html
 
+writable/partikel.log
+writable/partikel.pid
+writable/partikel.on
+writable/partikel.off
+
 php_errors.log
 
 #-------------------------
@@ -124,3 +129,4 @@ _modules/*
 
 /results/
 /phpunit*.xml
+
