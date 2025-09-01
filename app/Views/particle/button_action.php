@@ -130,7 +130,7 @@
         }
     }
 
-    updateCollectStatus();
+    // updateCollectStatus();
     setInterval(updateCollectStatus, 5000);
 
     $btnStart.addEventListener('click', async () => {
@@ -138,7 +138,7 @@
         try {
             const j = await post('<?= site_url('api/partikel/start') ?>');
             say('Data collection started!');
-            updateCollectStatus();
+            // updateCollectStatus();
         } catch (e) {
             say('Failed to start: ' + e.message, false);
         } finally { setLoading($btnStart, false); }
@@ -150,7 +150,7 @@
         try {
             const j = await post('<?= site_url('api/partikel/stop') ?>');
             say('Data collection stopped!');
-            updateCollectStatus();
+            // updateCollectStatus();
         } catch (e) {
             say('Failed to stop: ' + e.message, false);
         } finally { setLoading($btnStop, false); }
