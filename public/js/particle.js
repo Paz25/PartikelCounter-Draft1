@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const apiUrl = "/partikelcounterbuffer"; // endpoint API
+  const apiUrl = "/api/partikelcounterbuffer"; // endpoint API
   const isoSelect = document.getElementById("isoClass");
   const tableBody = document.querySelector("#particleTableBody");
 

@@ -24,7 +24,7 @@ class CoilController extends BaseController
         try {
             $this->svc->setCoil(true);
             cache()->save('coil_status', 'ON', 0);
-            $this->startReading();
+            // $this->startReading();
             return $this->response->setJSON(['ok' => true, 'status' => 'ON']);
         } catch (\Throwable $e) {
             return $this->response->setStatusCode(500)->setJSON(['ok' => false, 'error' => $e->getMessage()]);
@@ -52,9 +52,9 @@ class CoilController extends BaseController
         }
     }
 
-    private function startReading()
-    {
-        $cmd = 'php spark read:partikel > /dev/null 2>&1 &';
-        exec($cmd);
-    }
+    // private function startReading()
+    // {
+    //     $cmd = 'php spark read:partikel > /dev/null 2>&1 &';
+    //     exec($cmd);
+    // }
 }

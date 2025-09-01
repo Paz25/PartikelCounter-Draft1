@@ -36,7 +36,7 @@
 
     async function fetchParticle() {
         try {
-            const res = await fetch("<?= base_url('/partikelcounterbuffer') ?>");
+            const res = await fetch("<?= base_url('/api/partikelcounterbuffer') ?>");
             const json = await res.json();
 
             if (!json.data) {
