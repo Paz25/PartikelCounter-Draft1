@@ -39,7 +39,9 @@ class Logger extends BaseConfig
      *
      * @var int|list<int>
      */
-    public $threshold = (ENVIRONMENT === 'production') ? 4 : 9;
+
+    // public $threshold = (ENVIRONMENT === 'production') ? 4 : 9;
+    public $threshold = 9;
 
     /**
      * --------------------------------------------------------------------------
@@ -77,11 +79,11 @@ class Logger extends BaseConfig
      * @var array<class-string<HandlerInterface>, array<string, int|list<string>|string>>
      */
     public array $handlers = [
-        /*
-         * --------------------------------------------------------------------
-         * File Handler
-         * --------------------------------------------------------------------
-         */
+            /*
+             * --------------------------------------------------------------------
+             * File Handler
+             * --------------------------------------------------------------------
+             */
         FileHandler::class => [
             // The log levels that this handler will handle.
             'handles' => [
@@ -118,7 +120,7 @@ class Logger extends BaseConfig
              * By default, logs are written to WRITEPATH . 'logs/'
              * Specify a different destination here, if desired.
              */
-            'path' => '',
+            'path' => WRITEPATH . 'logs/',
         ],
 
         /*

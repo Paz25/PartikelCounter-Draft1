@@ -17,18 +17,37 @@ class ReadPartikel extends BaseCommand
         $reader = new PartikelReader();
         $model = new PartikelCounterBufferModel();
 
-        // default ISO Class = 7 jika tidak ada parameter
         $isoClass = $params[0] ?? 7;
 
+        $timeoutSeconds = 10;
+        $startTime = time();
+
+        $stopFile = WRITEPATH . 'partikel.stop';
+
         while (true) {
-            // 🔎 cek coil ON/OFF sensor (misal address 30 / 0x001E)
+            if (file_exists($stopFile)) {
+                CLI::write("Stop signal diterima, menghentikan proses.", 'red');
+                unlink($stopFile); // hapus flag
+                break;
+            }
+
+
             $isOn = $reader->cekCoilStatus(1, 0x001E);
 
             if (!$isOn) {
                 CLI::error("Sensor belum ON, tunggu ...");
+
+                if ((time() - $startTime) >= $timeoutSeconds) {
+                    CLI::error("Sensor tidak menyala selama {$timeoutSeconds} detik. Proses dihentikan.");
+                    break;
+                }
+
                 sleep(5);
-                continue; // skip loop, jangan insert ke DB
+                continue;
             }
+
+            // reset startTime jika sensor sudah ON
+            $startTime = time();
 
             // sensor ON → lanjut baca data
             $regs = $reader->bacaSensor();

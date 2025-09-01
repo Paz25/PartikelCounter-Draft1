@@ -10,13 +10,11 @@ class CoilController extends BaseController
 {
     private CoilService $svc;
     private $reader;
-    private $buffer;
 
     public function __construct()
     {
         $this->svc = new CoilService();
         $this->reader = new PartikelReader();
-        $this->buffer = new PartikelCounterBufferModel();
     }
 
     public function on()
@@ -35,7 +33,7 @@ class CoilController extends BaseController
     {
         try {
             $this->svc->setCoil(false);
-            cache()->save('coil_status', 'OFF', 0); // simpan status di cache
+            cache()->save('coil_status', 'OFF', 0);
             return $this->response->setJSON(['ok' => true, 'status' => 'OFF']);
         } catch (\Throwable $e) {
             return $this->response->setStatusCode(500)->setJSON(['ok' => false, 'error' => $e->getMessage()]);

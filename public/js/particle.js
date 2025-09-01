@@ -1,9 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const apiUrl = "/api/partikelcounterbuffer"; // endpoint API
+  const apiUrl = "/api/partikelcounterbuffer";
   const isoSelect = document.getElementById("isoClass");
   const tableBody = document.querySelector("#particleTableBody");
 
-  // Batas ISO
   const isoLimits = {
     1: { 0.3: 0, 0.5: 0, 1.0: 0, 2.5: 0, 5.0: 0, 10: 0 },
     2: { 0.3: 10, 0.5: 4, 1.0: 0, 2.5: 0, 5.0: 0, 10: 0 },
